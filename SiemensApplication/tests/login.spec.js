@@ -1,9 +1,9 @@
+import path from 'path';
 import { test, expect } from '@playwright/test';
 import { authenticator } from 'otplib';
 const TOTP_SECRET = process.env.TOTP_SECRET || 'MNAEAQDLMV2USSTDJFCWYTZTEUWDKMKW';
 
 test('test', async ({ page }) => {
-  test.setTimeout(90_000);
   await page.goto('https://siemens-dev1.pegacloud.com/prweb/PRAuth/app/GWSS/WufOMs17lxZjy1fI-RH7kXW6DtwPXjuN*/!STANDARD?pzuiactionrrr=CXtpbn1yblhJcEYzRHZaSUFPUGUvcE5ZV2xqTS9rSHJKSTQreE9CL1Zaa3FPZDI2MFZ6dUY2MzVJek5OdklKYWZ4S3hXc082OHRHVVg3VGZmRE8rYnkxM2xvZz09*');
   await page.getByRole('link', { name: 'Login with SiemensID' }).click();
   await page.getByRole('textbox', { name: 'Email address' }).fill('vineeti_hemdani@bluerose-tech.com');
@@ -32,35 +32,78 @@ await page.getByRole('textbox', { name: 'Enter your one-time code' }).fill(code)
 
 await page.getByRole('button', { name: 'Continue' }).click();
 
-
+//await page.pause();
 await page.waitForTimeout(5000);
 await page.locator('[data-test-id="202107280807300617678"]').click();
   await page.getByRole('button', { name: 'Toggle Left Navigation' }).click();
   await page.getByRole('menuitem', { name: ' New' }).click();
   await page.getByRole('menuitem', { name: 'Start Workflow' }).click();
-  
 
-await page.waitForTimeout(5000);
-    
 
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().locator('[data-test-id="20150901090134014230100"]').selectOption('SIE-GWSS-Work-IDT-Flow');
+
+ const gadget = page.frameLocator('iframe[name="PegaGadget1Ifr"]');
+
+  await gadget.getByTestId('20150901090134014230100').selectOption('SIE-GWSS-Work-IDT-Flow');
+  await gadget.getByTestId('20150901090134014631857').selectOption('Automation Pilot Workflow');
+  await gadget.getByRole('button', { name: 'Start Workflow' }).click();
+  await gadget.getByRole('combobox', { name: 'Item No. / Index' }).click();
+  await gadget.getByRole('combobox', { name: 'Item No. / Index' }).fill('11');
+  await gadget.getByRole('combobox', { name: 'Item No. / Index' }).press('Tab');
+  await gadget.getByRole('combobox', { name: 'Article title' }).fill('test');
+  await gadget.getByRole('combobox', { name: 'Article title' }).press('Tab');
+  await gadget.getByRole('textbox', { name: 'Specification / Target state' }).fill('TA');
+  await gadget.getByRole('textbox', { name: 'Specification / Target state' }).press('Tab');
+  await gadget.getByRole('textbox', { name: 'Description of the deviation' }).fill('VV');
+  await gadget.getByRole('textbox', { name: 'Description of the deviation' }).press('Tab');
+  await gadget.getByRole('textbox', { name: 'Number of parts checked' }).fill('10');
+  await gadget.getByRole('textbox', { name: 'Number of parts checked' }).press('Tab');
+  await gadget.getByRole('textbox', { name: 'Failure rate' }).fill('1');
+  await gadget.getByRole('textbox', { name: 'Failure rate' }).press('Tab');
+  await gadget.getByLabel('Is the cause known?').selectOption('Yes');
+  await gadget.getByLabel('Corrective action defined?').selectOption('Yes');
+  await gadget.getByRole('textbox', { name: 'Quantity' }).click();
+  await gadget.getByRole('textbox', { name: 'Quantity' }).fill('9');
+  await gadget.getByRole('textbox', { name: 'Quantity' }).press('Tab');
+  await gadget.getByTestId('20200701144756084279306-DatePicker').click();
+  await gadget.getByRole('button', { name: 'Aug 23,' }).click();
+  await gadget.getByRole('textbox', { name: 'Change number' }).click();
+  await gadget.getByRole('textbox', { name: 'Change number' }).fill('1');
+  await gadget.getByTestId('20160721092326035219972').click();
+  await gadget.getByTestId('2016072109335505834280').click();
+  await gadget.getByTestId('2016072109335505834280').fill('10');
+  await gadget.getByRole('textbox', { name: '3D - Corrective measures' }).click();
+  await gadget.getByRole('textbox', { name: '3D - Corrective measures' }).fill('5');
+  await gadget.getByRole('textbox', { name: 'Affected customer and / or' }).click();
+  await gadget.getByRole('textbox', { name: 'Affected customer and / or' }).fill('1');
+  await gadget.getByLabel('Causing process').selectOption('Design');
+  await gadget.getByLabel('Requirements for special').selectOption('No');
+  await gadget.getByLabel('Is there a need for changes').selectOption('No');
+  await gadget.getByLabel('Does the delivery to the').selectOption('No');
+  await gadget.getByRole('textbox', { name: 'Corrective action' }).click();
+  await gadget.getByRole('textbox', { name: 'Corrective action' }).fill('Test');
+
+  await gadget.getByTestId('2015111614330806168211').click();
+  //await gadget.getByLabel('Select file(s)').click();
   
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().locator('[data-test-id="20150901090134014631857"]').selectOption('Automation Pilot Workflow');
- await page.waitForTimeout(5000)
- 
- await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('button', { name: 'Start Workflow' }).click();
- await page.waitForTimeout(5000)
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('combobox', { name: 'Item No. / Index' }).click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('combobox', { name: 'Item No. / Index' }).fill('1');
-   await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('combobox', { name: 'Article title' }).click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('combobox', { name: 'Article title' }).fill('2');
-   await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Specification / Target state' }).click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Specification / Target state' }).fill('NA');
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByText('Is the cause known? Please Select... YesNo Enter Assignee <user not specified>').click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Description of the deviation' }).click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Description of the deviation' }).fill('NA1');
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Number of parts checked' }).click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Number of parts checked' }).fill('123');
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Failure rate' }).click();
-  await page.locator('iframe[name="PegaGadget1Ifr"]').contentFrame().getByRole('textbox', { name: 'Failure rate' }).fill('30');
+  const filePath = 'C:/Vineeti/Project/Upload Documents/FOLDER TO UPLOAD/1  - Copy.pdf';  
+  await gadget.getByLabel('Select file(s)').setInputFiles(filePath);
+
+  await gadget.getByRole('button', { name: 'Attach' }).click();
+
+  page1.pause();
+  await gadget.getByTestId('20150908171228012736690').click();
+  await gadget.getByTestId('20150908171228012736690').click();
+  await gadget.getByTestId('201609080744500837333').click();
+  await gadget.getByTestId('20160908075844034240762').click();
+  await gadget.getByTestId('20160908075844034240762').fill('vineeti_hemdani@bluerose-tech.com');
+  await gadget.getByTestId('20150908171228012736690').click();
+  await gadget.getByRole('button', { name: 'Submit workflow' }).click();
+  // await expect(gadget.getByTestId('20141009112850013217103')).toBeVisible();
+  // await expect(gadget.getByTestId('2016083016191602341167946').nth(3)).toBeVisible();
+  // await expect(gadget.getByTestId('201801251600250686412485')).toBeVisible();
+  // await expect(gadget.getByTestId('201801251600250686412485')).toBeVisible();
+  await gadget.getByTestId('201801251600250686412485').click();
+
+
+  
 });
